@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dalio Big Debt Cycle — Macro Model</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div>
+      <h1>Dalio Big Debt Cycle — Macro Model</h1>
+      <p class="subtitle">Based on Ray Dalio's <em>How Countries Go Broke</em> (2025)</p>
+    </div>
+    <div class="stage-badge">Stage 5 <span>Pre-breakdown</span></div>
+  </div>
+  <div id="dataStatus" class="data-status loading">Fetching live data…</div>
+</header>
+
+<main>
+
+  <section class="section">
+    <div class="section-label">Big debt cycle — current position</div>
+    <div class="stage-bar-wrap">
+      <div class="stage-pips">
+        <div class="pip done">1</div>
+        <div class="pip done">2</div>
+        <div class="pip done">3</div>
+        <div class="pip done">4</div>
+        <div class="pip current danger">5</div>
+        <div class="pip">6</div>
+      </div>
+      <div class="stage-endpoints"><span>Sound money</span><span>Disorder</span></div>
+    </div>
+    <div class="stage-desc">
+      <strong>Stage 5 — Big deleveraging:</strong> Debt is now so large that even central banks cannot service it without devaluing money. The US sits here: $36T+ federal debt, annual interest exceeding $1T, fiscal deficit ~6.4% of GDP, and a 2026–2028 refinancing wall. All five primary cycle markers are firing simultaneously for the first time since the 1930s.
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Core macro indicators</div>
+    <div class="grid-4">
+      <div class="metric-card">
+        <div class="mc-label">Fed funds rate</div>
+        <div class="mc-val" id="v-fedFunds">—</div>
+        <div class="mc-note warn" id="n-fedFunds">Loading…</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Headline PCE inflation</div>
+        <div class="mc-val" id="v-headlinePCE">—</div>
+        <div class="mc-note bad" id="n-headlinePCE">Loading…</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Core PCE inflation</div>
+        <div class="mc-val" id="v-corePCE">—</div>
+        <div class="mc-note bad" id="n-corePCE">Loading…</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">S&amp;P 500</div>
+        <div class="mc-val" id="v-spx">—</div>
+        <div class="mc-note good" id="n-spx">Loading…</div>
+      </div>
+    </div>
+    <div class="grid-4" style="margin-top:10px">
+      <div class="metric-card">
+        <div class="mc-label">Unemployment</div>
+        <div class="mc-val" id="v-unemployment">—</div>
+        <div class="mc-note warn" id="n-unemployment">Loading…</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">10-yr Treasury yield</div>
+        <div class="mc-val" id="v-yield10yr">—</div>
+        <div class="mc-note bad" id="n-yield10yr">Loading…</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">USD index (DXY)</div>
+        <div class="mc-val" id="v-dxy">—</div>
+        <div class="mc-note bad" id="n-dxy">Loading…</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Gold (USD/oz)</div>
+        <div class="mc-val" id="v-gold">—</div>
+        <div class="mc-note bad" id="n-gold">Loading…</div>
+      </div>
+    </div>
+    <div class="grid-4" style="margin-top:10px">
+      <div class="metric-card">
+        <div class="mc-label">Yield curve (2s10s)</div>
+        <div class="mc-val" id="v-yieldSpread">—</div>
+        <div class="mc-note warn" id="n-yieldSpread">Loading…</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">IG credit spread</div>
+        <div class="mc-val" id="v-igSpread">—</div>
+        <div class="mc-note warn">Elevated vs history</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">HY credit spread</div>
+        <div class="mc-val" id="v-hySpread">—</div>
+        <div class="mc-note bad">Stress signal rising</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Real wage growth</div>
+        <div class="mc-val" id="v-realWage">—</div>
+        <div class="mc-note warn">Barely positive</div>
+      </div>
+    </div>
+    <div class="grid-4" style="margin-top:10px">
+      <div class="metric-card">
+        <div class="mc-label">Debt / GDP</div>
+        <div class="mc-val" id="v-debtGDP">—</div>
+        <div class="mc-note bad">Post-WW2 record</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Fiscal deficit / GDP</div>
+        <div class="mc-val" id="v-deficitGDP">—</div>
+        <div class="mc-note bad">Structural, not cyclical</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Interest cost / GDP</div>
+        <div class="mc-val" id="v-interestGDP">—</div>
+        <div class="mc-note bad">Exceeds defence spend</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Consumer confidence</div>
+        <div class="mc-val" id="v-consumerConf">—</div>
+        <div class="mc-note bad">Below 100 = pessimism</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Dalio five-marker + extended signal status</div>
+    <div class="markers-card">
+      <div class="marker-row"><span class="dot red"></span><span class="mname">Debt service exceeds income growth</span><span class="mstatus red">Firing</span></div>
+      <div class="marker-row"><span class="dot red"></span><span class="mname">Central bank monetisation / yield suppression</span><span class="mstatus red">Firing</span></div>
+      <div class="marker-row"><span class="dot red"></span><span class="mname">Domestic wealth &amp; values gap — populism rising</span><span class="mstatus red">Firing</span></div>
+      <div class="marker-row"><span class="dot red"></span><span class="mname">Geopolitical shift — US-Iran conflict, China rivalry</span><span class="mstatus red">Firing</span></div>
+      <div class="marker-row"><span class="dot amber"></span><span class="mname">Reserve currency credibility erosion (gold +73% YoY)</span><span class="mstatus amber">Emerging</span></div>
+      <div class="marker-row"><span class="dot red"></span><span class="mname">Bond vigilante pressure — 10-yr elevated at 4.45%</span><span class="mstatus red">Firing</span></div>
+      <div class="marker-row"><span class="dot amber"></span><span class="mname">Credit market stress — HY spreads widening</span><span class="mstatus amber">Emerging</span></div>
+      <div class="marker-row"><span class="dot red"></span><span class="mname">Consumer squeeze — confidence below 90, real wages +0.3%</span><span class="mstatus red">Firing</span></div>
+      <div class="marker-row"><span class="dot red"></span><span class="mname">Fractured Fed — 4 dissents at Apr 2026 FOMC (most since 1992)</span><span class="mstatus red">Firing</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Outcome probability gauge</div>
+    <div class="gauge-section">
+      <div class="gauge-left">
+        <canvas id="gaugeChart" width="300" height="160" aria-label="Semicircular gauge showing probability distribution"></canvas>
+        <div class="gauge-ends"><span>Depression</span><span>Soft landing</span></div>
+        <div id="outcomeBadge" class="outcome-badge badge-rec">Base case: recession / slow-growth (no intervention)</div>
+      </div>
+      <div class="gauge-right">
+        <div class="prob-bars">
+          <div class="pb-row"><span class="pb-label">Depression</span><div class="pb-track"><div class="pb-fill fill-dep" id="pb-dep" style="width:15%"></div></div><span class="pb-pct pct-dep" id="pp-dep">15%</span></div>
+          <div class="pb-row"><span class="pb-label">Recession</span><div class="pb-track"><div class="pb-fill fill-rec" id="pb-rec" style="width:38%"></div></div><span class="pb-pct pct-rec" id="pp-rec">38%</span></div>
+          <div class="pb-row"><span class="pb-label">Slow growth</span><div class="pb-track"><div class="pb-fill fill-slow" id="pb-slow" style="width:32%"></div></div><span class="pb-pct pct-slow" id="pp-slow">32%</span></div>
+          <div class="pb-row"><span class="pb-label">Soft landing</span><div class="pb-track"><div class="pb-fill fill-soft" id="pb-soft" style="width:15%"></div></div><span class="pb-pct pct-soft" id="pp-soft">15%</span></div>
+        </div>
+        <p id="gaugeNarr" class="gauge-narr">Base case without intervention: modal outcome is mild recession or slow-growth stagnation (~70% combined). Soft landing at 15% requires the 1990s-style grand bargain — Dalio considers it politically improbable. Depression at 15% requires a policy error cascade. Select an intervention below to update probabilities.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Intervention simulator — select a government action</div>
+    <div class="iv-grid">
+      <button class="iv-btn" onclick="pick('tariff')" id="btn-tariff">
+        <div class="iv-title">&#128702; Tariff escalation</div>
+        <div class="iv-sub">60%+ China, 20% universal</div>
+      </button>
+      <button class="iv-btn" onclick="pick('qe')" id="btn-qe">
+        <div class="iv-title">&#128424; QE / debt monetisation</div>
+        <div class="iv-sub">Fed buys Treasuries at scale</div>
+      </button>
+      <button class="iv-btn" onclick="pick('austerity')" id="btn-austerity">
+        <div class="iv-title">&#9988; Fiscal austerity</div>
+        <div class="iv-sub">DOGE-style spending cuts</div>
+      </button>
+      <button class="iv-btn" onclick="pick('ratecut')" id="btn-ratecut">
+        <div class="iv-title">&#8659; Aggressive rate cuts</div>
+        <div class="iv-sub">Emergency cuts to 1–2%</div>
+      </button>
+      <button class="iv-btn" onclick="pick('devalue')" id="btn-devalue">
+        <div class="iv-title">&#128178; Dollar devaluation</div>
+        <div class="iv-sub">Managed USD depreciation deal</div>
+      </button>
+      <button class="iv-btn" onclick="pick('reform')" id="btn-reform">
+        <div class="iv-title">&#129309; Fiscal grand bargain</div>
+        <div class="iv-sub">Bipartisan deal — 1990s path</div>
+      </button>
+    </div>
+    <div class="sim-panel" id="simPanel">
+      <div class="sim-title" id="simTitle">Select an intervention above to see projected effects across all indicators</div>
+      <div id="simBody" style="display:none">
+        <div class="sim-grid-8" id="simGrid"></div>
+        <p class="sim-narr" id="simNarr"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Projected trajectory — historical &amp; scenarios 2020–2028</div>
+    <div class="chart-tabs">
+      <button class="ct active" onclick="sw('rates',this)">Fed rate</button>
+      <button class="ct" onclick="sw('inflation',this)">Inflation</button>
+      <button class="ct" onclick="sw('spx',this)">S&amp;P 500</button>
+      <button class="ct" onclick="sw('unemp',this)">Unemployment</button>
+      <button class="ct" onclick="sw('yield',this)">10-yr yield</button>
+      <button class="ct" onclick="sw('gold',this)">Gold</button>
+      <button class="ct" onclick="sw('usd',this)">USD index</button>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="mainChart" aria-label="Time series chart of selected macro indicator"></canvas>
+    </div>
+    <div class="chart-legend">
+      <span><span class="ld blue"></span>Historical</span>
+      <span><span class="ld red"></span>Stress / depression path</span>
+      <span><span class="ld green"></span>Managed / soft landing path</span>
+    </div>
+    <p class="chart-note">Projections are illustrative applications of Dalio's framework. Not financial advice.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Historical parallels — which path are we on?</div>
+    <div class="parallels-grid">
+      <div class="parallel-card bad">
+        <div class="par-title">1929–1933 (Depression)</div>
+        <div class="par-body">Debt deflation, austerity, bank failures, 25% unemployment. Avoided if: no credit system collapse, no competitive devaluations.</div>
+      </div>
+      <div class="parallel-card warn">
+        <div class="par-title">1970s (Stagflation)</div>
+        <div class="par-body">Supply shocks + loose monetary policy. Required two recessions and Volcker's 20% rates to resolve. Current Iran oil shock echoes this.</div>
+      </div>
+      <div class="parallel-card neutral">
+        <div class="par-title">1985–95 (Managed decline)</div>
+        <div class="par-body">Plaza Accord USD devaluation, gradual fiscal consolidation. Avoided depression but 15+ years of adjustment. Dollar lost 40% vs major currencies.</div>
+      </div>
+      <div class="parallel-card good">
+        <div class="par-title">1990s (Soft landing)</div>
+        <div class="par-body">Clinton-era surplus, productivity boom, Greenspan soft landing. Dalio's only off-ramp. Requires bipartisan political will currently absent.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">FRED API key — enable live data</div>
+    <div class="api-card">
+      <p>Enter your free FRED API key to enable live data for 6 of 8 indicators. Get one in 60 seconds at <a href="https://fred.stlouisfed.org/docs/api/api_key.html" target="_blank">fred.stlouisfed.org</a> — free, no credit card.</p>
+      <div class="api-row">
+        <input type="text" id="fredKeyInput" placeholder="Paste your 32-character FRED API key here" maxlength="40" />
+        <button onclick="saveFredKey()">Save &amp; reload</button>
+      </div>
+      <p class="api-note">Key is stored only in your browser (localStorage). Never sent anywhere except directly to FRED's servers.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Based on Ray Dalio, <em>How Countries Go Broke</em> (Avid Reader Press, 2025) · Educational model only · Not financial advice</p>
+  <p style="margin-top:4px;opacity:.6">Live sources: FRED API (Fed funds, Core PCE, Unemployment, 10-yr yield, 2s10s, Debt/GDP) · Yahoo Finance via allorigins proxy (S&amp;P 500, Gold)</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
