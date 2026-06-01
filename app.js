@@ -395,45 +395,64 @@ function set(id, val, cls, note) {
 }
 
 // ─── API KEY MANAGEMENT ───────────────────────────────────────────────────────
-function saveFredKey() {
+async function saveFredKey() {
   const input = document.getElementById('fredKeyInput');
   if (!input) return;
   const key = input.value.trim();
-  if (key.length !== 32) {
-    alert('FRED API keys are 32 characters. Check you pasted the full key.');
+
+  if (key.length < 30) {
+    alert('That looks too short for a FRED API key (should be 32 characters). Please check you copied it fully.');
     return;
   }
-  localStorage.setItem('fredApiKey', key);
-  location.reload();
-}
 
-function loadSavedKey() {
-  const saved = localStorage.getItem('fredApiKey');
-  if (saved && typeof FRED_KEY !== 'undefined') {
-    // Inject into data.js variable at runtime
-    window._FRED_KEY_OVERRIDE = saved;
+  // Save with belt-and-suspenders: both localStorage and sessionStorage
+  try {
+    localStorage.setItem('fredApiKey', key);
+    sessionStorage.setItem('fredApiKey', key);
+  } catch(e) {
+    alert('Could not save key to browser storage: ' + e.message);
+    return;
   }
-  const input = document.getElementById('fredKeyInput');
-  if (input && saved) input.value = saved;
+
+  // Update button feedback
+  const btn = document.querySelector('.api-row button');
+  if (btn) { btn.textContent = 'Fetching...'; btn.disabled = true; }
+  updateStatus('loading');
+
+  // Fetch live data immediately without a page reload
+  try {
+    const data = await loadLiveData();
+    renderData(data);
+    buildChart(currentSeries);
+  } catch(e) {
+    updateStatus('fallback', 0);
+  }
+
+  if (btn) { btn.textContent = 'Saved and live!'; btn.disabled = false; }
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 let currentSeries = 'rates';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  loadSavedKey();
-  // If user has saved a key, override the placeholder in data.js
-  if (window._FRED_KEY_OVERRIDE) {
-    Object.defineProperty(window, 'FRED_KEY', { value: window._FRED_KEY_OVERRIDE, writable: true });
-  }
+  // 1. Populate saved key into input box (if any)
+  try {
+    const saved = localStorage.getItem('fredApiKey');
+    const input = document.getElementById('fredKeyInput');
+    if (input && saved) input.value = saved;
+  } catch {}
+
+  // 2. Draw gauge and chart immediately with fallback values — no blank cards
   drawGauge({ dep: 15, rec: 38, slow: 32, soft: 15 });
+  renderData(FALLBACK);   // show May 2026 numbers right away
   buildChart('rates');
-  // Fetch live data
+
+  // 3. Attempt live fetch — overwrite cards if successful
   try {
     const data = await loadLiveData();
     renderData(data);
+    buildChart(currentSeries); // refresh chart with any live "Now" points
   } catch (e) {
-    updateStatus('fallback');
-    renderData(FALLBACK);
+    updateStatus('fallback', 0);
   }
 });
