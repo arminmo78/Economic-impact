@@ -329,12 +329,6 @@ function sw(series, btn) {
   buildChart(series);
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  drawGauge({ dep: 15, rec: 38, slow: 32, soft: 15 });
-  buildChart('rates');
-});
-
 // ─── RENDER LIVE DATA INTO METRIC CARDS ──────────────────────────────────────
 function renderData(d) {
   // Fed funds
@@ -443,15 +437,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch {}
 
   // 2. Draw gauge and chart immediately with fallback values — no blank cards
-  drawGauge({ dep: 15, rec: 38, slow: 32, soft: 15 });
-  renderData(FALLBACK);   // show May 2026 numbers right away
-  buildChart('rates');
+  // Each step is isolated so one failure (e.g. Chart.js blocked) can't stop the rest
+  try { drawGauge({ dep: 15, rec: 38, slow: 32, soft: 15 }); } catch (e) { console.warn('gauge failed', e); }
+  try { renderData(FALLBACK); } catch (e) { console.warn('render failed', e); }  // May 2026 numbers right away
+  try { buildChart('rates'); } catch (e) { console.warn('chart failed', e); }
 
   // 3. Attempt live fetch — overwrite cards if successful
   try {
     const data = await loadLiveData();
-    renderData(data);
-    buildChart(currentSeries); // refresh chart with any live "Now" points
+    try { renderData(data); } catch (e) { console.warn('render failed', e); }
   } catch (e) {
     updateStatus('fallback', 0);
   }
