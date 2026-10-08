@@ -388,53 +388,12 @@ function set(id, val, cls, note) {
   }
 }
 
-// ─── API KEY MANAGEMENT ───────────────────────────────────────────────────────
-async function saveFredKey() {
-  const input = document.getElementById('fredKeyInput');
-  if (!input) return;
-  const key = input.value.trim();
-
-  if (key.length < 30) {
-    alert('That looks too short for a FRED API key (should be 32 characters). Please check you copied it fully.');
-    return;
-  }
-
-  // Save with belt-and-suspenders: both localStorage and sessionStorage
-  try {
-    localStorage.setItem('fredApiKey', key);
-    sessionStorage.setItem('fredApiKey', key);
-  } catch(e) {
-    alert('Could not save key to browser storage: ' + e.message);
-    return;
-  }
-
-  // Update button feedback
-  const btn = document.querySelector('.api-row button');
-  if (btn) { btn.textContent = 'Fetching...'; btn.disabled = true; }
-  updateStatus('loading');
-
-  // Fetch live data immediately without a page reload
-  try {
-    const data = await loadLiveData();
-    renderData(data);
-    buildChart(currentSeries);
-  } catch(e) {
-    updateStatus('fallback', 0);
-  }
-
-  if (btn) { btn.textContent = 'Saved and live!'; btn.disabled = false; }
-}
-
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 let currentSeries = 'rates';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Populate saved key into input box (if any)
-  try {
-    const saved = localStorage.getItem('fredApiKey');
-    const input = document.getElementById('fredKeyInput');
-    if (input && saved) input.value = saved;
-  } catch {}
+  // 1. Clear any FRED key stored in this browser by earlier versions (no longer used)
+  try { localStorage.removeItem('fredApiKey'); sessionStorage.removeItem('fredApiKey'); } catch {}
 
   // 2. Draw gauge and chart immediately with fallback values — no blank cards
   // Each step is isolated so one failure (e.g. Chart.js blocked) can't stop the rest
@@ -447,6 +406,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const data = await loadLiveData();
     try { renderData(data); } catch (e) { console.warn('render failed', e); }
   } catch (e) {
-    updateStatus('fallback', 0);
+    updateStatus('fallback');
   }
 });

@@ -247,23 +247,11 @@
     </div>
   </section>
 
-  <section class="section">
-    <div class="section-label">FRED API key — enable live data</div>
-    <div class="api-card">
-      <p>Enter your free FRED API key to enable live data for 6 of 8 indicators. Get one in 60 seconds at <a href="https://fred.stlouisfed.org/docs/api/api_key.html" target="_blank">fred.stlouisfed.org</a> — free, no credit card.</p>
-      <div class="api-row">
-        <input type="text" id="fredKeyInput" placeholder="Paste your 32-character FRED API key here" maxlength="40" />
-        <button onclick="saveFredKey()">Save &amp; reload</button>
-      </div>
-      <p class="api-note">Key is stored only in your browser (localStorage). Never sent anywhere except directly to FRED's servers.</p>
-    </div>
-  </section>
-
 </main>
 
 <footer>
   <p>Based on Ray Dalio, <em>How Countries Go Broke</em> (Avid Reader Press, 2025) · Educational model only · Not financial advice</p>
-  <p style="margin-top:4px;opacity:.6">Live sources: FRED API (Fed funds, Core PCE, Unemployment, 10-yr yield, 2s10s, Debt/GDP) · Yahoo Finance via allorigins proxy (S&amp;P 500, Gold)</p>
+  <p style="margin-top:4px;opacity:.6">Live sources, refreshed every ~4 hours: FRED (Fed funds, Core PCE, Unemployment, 10-yr yield, 2s10s, Debt/GDP) · Yahoo Finance (S&amp;P 500, Gold)</p>
 </footer>
 
 <script src="data.js"></script>
