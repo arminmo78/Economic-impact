@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-10T00:03:31.354Z",
+  "updated": "2026-10-10T05:55:27.140Z",
   "liveThisRun": 8,
   "total": 8,
   "failed": [],
@@ -11,6 +11,6 @@
     "yield2yr": 4.75,
     "debtGDP": 123,
     "spx": 7812,
-    "gold": 4220
+    "gold": 4216
   }
 }
