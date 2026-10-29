@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-29T15:14:51.771Z",
+  "updated": "2026-10-29T21:08:49.673Z",
   "liveThisRun": 8,
   "total": 8,
   "failed": [],
@@ -7,10 +7,10 @@
     "fedFunds": 3.88,
     "corePCE": 3.1,
     "unemployment": 4.2,
-    "yield10yr": 4.99,
-    "yield2yr": 4.7,
+    "yield10yr": 5.05,
+    "yield2yr": 4.67,
     "debtGDP": 121,
-    "spx": 7725,
-    "gold": 4036
+    "spx": 7720,
+    "gold": 4034
   }
 }
